@@ -1,6 +1,6 @@
 buildbot_version = 0.8.9
 
-sandbox = sandbox/bin/activate
+sandbox = . sandbox/bin/activate
 
 default:
 
@@ -12,4 +12,4 @@ install-deps: sandbox
 	$(sandbox) && easy_install buildbot==$(buildbot_version)
 
 start:
-	$(sanbox) && buildbot start master
+	$(sandbox) && buildbot start master
