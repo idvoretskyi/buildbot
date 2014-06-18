@@ -1,2 +1,6 @@
 *~
 sandbox/
+*.log
+*.pid
+*.hostname
+*/*/
