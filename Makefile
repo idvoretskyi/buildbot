@@ -10,6 +10,7 @@ sandbox:
 install-deps: sandbox
 	$(sandbox) && easy_install sqlalchemy==0.7.10
 	$(sandbox) && easy_install buildbot==$(buildbot_version)
+	$(sandbox) && easy_install buildbot-slave==$(buildbot_version)
 
 start:
 	$(sandbox) && buildbot start master
