@@ -1,6 +1,9 @@
 *~
 sandbox/
 *.log
+*.log.*
 *.pid
 *.hostname
 */*/
+master/state.sqlite
+config.py
