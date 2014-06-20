@@ -5,5 +5,5 @@ sandbox/
 *.pid
 *.hostname
 */*/
-master/state.sqlite
+master/state.sqlite*
 config.py
