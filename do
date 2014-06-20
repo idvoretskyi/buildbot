@@ -42,23 +42,19 @@ set-origin () {
 }
 
 on_master () {
-    $ssh -v $master_ssh "cd $master_path && $(printf "%q " "$@")"
-}
-
-on_master_sh () {
-    $ssh $master_ssh "cd $master_path && $1"
+    $ssh -v $master_ssh "cd $master_path && ./do in_sandbox $(printf "%q " "$@")"
 }
 
 start () {
-    on_master ./do in_sandbox buildbot start master
+    on_master buildbot start master
 }
 
 stop () {
-    on_master ./do in_sandbox buildbot stop master
+    on_master buildbot stop master
 }
 
 reconfig () {
-    on_master ./do in_sandbox buildbot reconfig master
+    on_master buildbot reconfig master
 }
 
 push () {
