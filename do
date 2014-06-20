@@ -26,6 +26,7 @@ mk_sandbox () {
 }
 
 in_sandbox () (
+    set +eu
     . "$root"/sandbox/bin/activate
     "$@"
 )
