@@ -11,12 +11,12 @@ master_path=buildbot
 master_ssh=$master_login@$master_host
 master_full=$master_ssh:$master_path
 
-ensure_sandbox () {
+mk_sandbox () {
   virtualenv --no-site-packages sandbox
 }
 
 in_sandbox () (
-    . sandbox/bin/activate
+    . "$(dirname "$0")/sandbox/bin/activate"
     "$@"
 )
 
