@@ -77,4 +77,28 @@ background_ssh () {
     fi
 }
 
+ask () {
+    local ans
+    echo -n "$1 "
+    read ans
+    echo -n "$ans"
+}
+
+new_slave () {
+    cat <<EOF
+Instructions for adding a slave:
+ssh \$HOST
+sudo useradd -m buildslave
+sudo adduser buildslave remotelogin
+sudo passwd buildslave
+sudo -i -u buildslave
+mkdir buildslave
+virtualenv --no-site-packages .buildslave-sandbox
+. .buildslave-sandbox/bin/activate
+easy_install buildbot-slave
+buildslave create-slave buildslave \$MASTER:9989 \$HOST \$PASSWORD
+buildslave start buildslave
+EOF
+}
+
 "$@"
