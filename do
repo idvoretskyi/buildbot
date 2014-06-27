@@ -90,12 +90,13 @@ Instructions for adding a generic slave:
 sudo useradd -m buildslave
 sudo adduser buildslave remotelogin
 sudo passwd buildslave
+sudo apt-get install python-virtualenv python-dev
 sudo -i -u buildslave
 mkdir buildslave
 virtualenv --no-site-packages .buildslave-sandbox
 . .buildslave-sandbox/bin/activate
 easy_install buildbot-slave
-buildslave create-slave buildslave \$MASTER:9989 \$HOST \$PASSWORD
+# buildslave create-slave buildslave dr-doom:9989 \`hostname\` \$PASSWORD
 buildslave start buildslave
 
 Startup on debian/ubuntu:
