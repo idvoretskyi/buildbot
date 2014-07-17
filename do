@@ -42,7 +42,11 @@ set-origin () {
 }
 
 on_master () {
-    $ssh -v $master_ssh "cd $master_path && ./do in_sandbox $(printf "%q " "$@")"
+    $ssh $master_ssh "cd $master_path && ./do in_sandbox $(printf "%q " "$@")"
+}
+
+put_on_master () {
+    cat "$1" | on_master bash -c 'cat > "$1"' -- "$1"
 }
 
 start () {
