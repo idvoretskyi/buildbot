@@ -1,4 +1,5 @@
 *~
+*.pyc
 sandbox/
 *.log
 *.log.*
