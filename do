@@ -57,6 +57,10 @@ stop () {
     on_master buildbot stop master
 }
 
+checkconfig () {
+    in_sandbox buildbot checkconfig master
+}
+
 reconfig () {
     on_master buildbot reconfig master
 }
