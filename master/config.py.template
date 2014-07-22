@@ -5,5 +5,3 @@ irc_server = 'irc.freenode.org'
 irc_nickname = 'ReBuild'
 irc_channel =
 irc_password =
-
-github_secret_token =
