@@ -92,34 +92,4 @@ ask () {
     echo -n "$ans"
 }
 
-new_slave () {
-    cat <<EOF
-Instructions for adding a generic slave:
-sudo useradd -m buildslave
-sudo adduser buildslave remotelogin
-sudo passwd buildslave
-sudo apt-get install python-virtualenv python-dev
-sudo -i -u buildslave
-mkdir buildslave
-virtualenv --no-site-packages .buildslave-sandbox
-. .buildslave-sandbox/bin/activate
-easy_install buildbot-slave
-# buildslave create-slave buildslave dr-doom:9989 \`hostname\` \$PASSWORD
-buildslave start buildslave
-
-Startup on debian/ubuntu:
-sudo apt-get install buildbot-slave
-sudo tee /etc/default/buildslave << END
-SLAVE_RUNNER=/home/buildslave/.buildslave-sandbox/bin/buildslave
-SLAVE_ENABLED[1]=1
-SLAVE_NAME[1]="RethinkDB build slave"
-SLAVE_USER[1]="buildslave"
-SLAVE_BASEDIR[1]="/home/buildslave/buildslave"
-SLAVE_OPTIONS[1]=""
-SLAVE_PREFIXCMD[1]=""
-END
-sudo /etc/init.d/buildslave start
-EOF
-}
-
 "$@"
