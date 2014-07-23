@@ -1,7 +1,12 @@
 # RethinkDB buildbot
 
+## Web status page
+
 The status page is available internally at http://dr-doom:8010/ and
 externally at https://dr-doom.8010.dev.rethinkdb.com/
+
+The style and content of the status page can be changed by editing the
+files in `master/public_html/` and `master/templates/`
 
 ## Useful documentation
 
