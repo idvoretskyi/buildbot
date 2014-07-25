@@ -10,7 +10,8 @@ files in `master/public_html/` and `master/templates/`
 
 ## Useful documentation
 
-* Full buildbot documentation: http://docs.buildbot.net/0.8.8/full.html
+* Single page buildbot documentation: http://docs.buildbot.net/0.8.8/full.html
+* Buildbot documentation index: http://docs.buildbot.net/0.8.9/genindex.html
 
 ## The `do` script
 
