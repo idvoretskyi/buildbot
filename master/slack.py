@@ -36,12 +36,13 @@ class Slack(StatusReceiverMultiService):
         res.raise_for_status()
 
     def builderAdded(self, name, builder):
-        builder.subscribe(self)
+        return self
 
-    def setServiceParent(self, parent):
-        StatusReceiverMultiService.setServiceParent(self, parent)
-        self.parent.subscribe(self)
+    def startService(self):
+        StatusReceiverMultiService.startService(self)
+        self._status = self.parent.getStatus()
+        self._status.subscribe(self)
 
-    def disownServiceParent(self):
-        self.parent.unsubscribe(self)
-        return StatusReceiverMultiService.disownServiceParent(self)
+    def stopService(self):
+        StatusReceiverMultiService.stopService(self)
+        self._status.unsubscribe(self)
