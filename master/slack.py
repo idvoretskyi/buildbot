@@ -4,7 +4,7 @@ import requests
 # See http://docs.buildbot.net/0.8.4/reference/buildbot.interfaces.IStatusReceiver-class.html
 
 from zope.interface import implements
-from buildbot.status.base import StatusReceiver
+from buildbot.status.base import StatusReceiverMultiService
 from buildbot.interfaces import IStatusReceiver
 
 def link(url, text):
@@ -21,10 +21,11 @@ def field(title, value=None, short=None):
     fields = [('title', title), ('value', value), ('short', short)]
     return {k: v for k, v in fields if v is not None}
 
-class Slack(StatusReceiver):
+class Slack(StatusReceiverMultiService):
     implements(IStatusReceiver)
 
     def __init__(self, webhook):
+        StatusReceiverMultiService.__init__(self)
         self.webhook = webhook
 
     def send(self, text=None, payload=None, attachments=None):
@@ -36,3 +37,11 @@ class Slack(StatusReceiver):
 
     def builderAdded(self, name, builder):
         builder.subscribe(self)
+
+    def setServiceParent(self, parent):
+        StatusReceiverMultiService.setServiceParent(self, parent)
+        self.parent.subscribe(self)
+
+    def disownServiceParent(self):
+        self.parent.unsubscribe(self)
+        return StatusReceiverMultiService.disownServiceParent(self)
