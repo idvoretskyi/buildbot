@@ -8,6 +8,26 @@ externally at https://dr-doom.8010.dev.rethinkdb.com/
 The style and content of the status page can be changed by editing the
 files in `master/public_html/` and `master/templates/`
 
+## Modifying the buildbot configuration
+
+Check out this repo from dr-doom, and add a github remote:
+
+```
+git clone buildbot@dr-doom:buildbot
+git remote add git@github.com:rethinkdb/
+```
+
+If the dr-doom HEAD and github HEAD are not in sync, someone else is
+working on the buildbot configuration. Coordinate your changes to
+avoid conflicts.
+
+* Before pushing, `./do checkconfig` should say `Config file is good!`
+* Commit your changes locally `git commit -m 'descriptive message'`
+* Push the changes to buildbot@dr-doom:buildbot `./do push`
+* Tell the running buildbot to reload the configuration file `./do reconfig`
+* Check that your changes work, perhaps by triggering some builds on http://dr-doom:8010
+* Push to github. `git push github master`
+
 ## Useful documentation
 
 * Single page buildbot documentation: http://docs.buildbot.net/0.8.8/full.html
