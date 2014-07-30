@@ -14,7 +14,7 @@ Check out this repo from dr-doom, and add a github remote:
 
 ```
 git clone buildbot@dr-doom:buildbot
-git remote add git@github.com:rethinkdb/
+git remote add github git@github.com:rethinkdb/
 ```
 
 If the dr-doom HEAD and github HEAD are not in sync, someone else is

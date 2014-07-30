@@ -22,20 +22,24 @@ else
 fi
 
 mk_sandbox () {
+    hash virtualenv 2>/dev/null || { echo >&2 "The Python virtualenv module is required but does not seem to be available"; exit 1; }
     virtualenv --no-site-packages sandbox
 }
 
 in_sandbox () (
+    if [[ ! -d "$root"/sandbox ]]; then
+        mk_sandbox
+    fi
     set +eu
     . "$root"/sandbox/bin/activate
     "$@"
 )
 
 install_deps () {
-    in_sandbox easy_install sqlalchemy==0.7.10
-    in_sandbox easy_install buildbot==$buildbot_version
-    in_sandbox easy_install buildbot-slave==$buildbot_version
-    in_sandbox easy_install requests
+    in_sandbox easy_install --quiet sqlalchemy==0.7.10
+    in_sandbox easy_install --quiet buildbot==$buildbot_version
+    in_sandbox easy_install --quiet buildbot-slave==$buildbot_version
+    in_sandbox easy_install --quiet requests
 }
 
 set-origin () {
@@ -59,6 +63,12 @@ stop () {
 }
 
 checkconfig () {
+    if [[ ! -f master/config.py ]] || [[ `head -n 1 "$root"/master/config.py` =~ ^#\ dummy\ config.py\ file ]]; then
+        # write a dummy config.py
+        templateContents=`cat "$root"/master/config.py.template`
+        printf "# dummy config.py file created by the do command\n\n$templateContents\n" > "$root"/master/config.py
+    fi
+    install_deps
     in_sandbox buildbot checkconfig master
 }
 

@@ -1,9 +1,9 @@
 auth_user = 'rethinkdb'
-auth_password =
+auth_password = ''
 
 irc_server = 'irc.freenode.org'
 irc_nickname = 'ReBuild'
-irc_channel =
-irc_password =
+irc_channel = ''
+irc_password = ''
 
-slack_webhook_url =
+slack_webhook_url = ''
