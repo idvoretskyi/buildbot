@@ -35,6 +35,7 @@ install_deps () {
     in_sandbox easy_install sqlalchemy==0.7.10
     in_sandbox easy_install buildbot==$buildbot_version
     in_sandbox easy_install buildbot-slave==$buildbot_version
+    in_sandbox easy_install requests
 }
 
 set-origin () {
