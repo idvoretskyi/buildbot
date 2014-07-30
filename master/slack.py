@@ -7,6 +7,8 @@ from zope.interface import implements
 from buildbot.status.base import StatusReceiverMultiService
 from buildbot.interfaces import IStatusReceiver
 
+LOG = open('/tmp/buildbot.delme', 'a')
+
 def link(url, text):
     if text:
         return '<%s|%s>' % (url, text)
@@ -27,6 +29,9 @@ class Slack(StatusReceiverMultiService):
     def __init__(self, webhook):
         StatusReceiverMultiService.__init__(self)
         self.webhook = webhook
+        LOG.write('init\n')
+        self.send('init\n')
+
 
     def send(self, text=None, payload=None, attachments=None):
         if payload is None:
@@ -36,13 +41,19 @@ class Slack(StatusReceiverMultiService):
         res.raise_for_status()
 
     def builderAdded(self, name, builder):
+        LOG.write('added ' + name + '\n')
+        self.send('added ' + name + '\n')
         return self
 
     def startService(self):
+        LOG.write('start\n')
+        self.send('start\n')
         StatusReceiverMultiService.startService(self)
         self._status = self.parent.getStatus()
         self._status.subscribe(self)
 
     def stopService(self):
+        LOG.write('stop\n')
+        self.send('stop\n')
         StatusReceiverMultiService.stopService(self)
         self._status.unsubscribe(self)
