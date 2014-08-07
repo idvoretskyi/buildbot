@@ -28,9 +28,12 @@ class Slack(StatusReceiverMultiService):
     def __init__(self, webhook):
         log.msg('Slack: __init__')
         StatusReceiverMultiService.__init__(self)
-        self.webhook = webhook
+        self._webhook = webhook
+        self._stopped = False
 
     def send(self, text=None, payload=None, attachments=None):
+        if self._stopped:
+            return
         if payload is None:
             fields = [('text', text), ('attachments', attachments)]
             payload = {k: v for k, v in fields if v is not None}
@@ -52,3 +55,4 @@ class Slack(StatusReceiverMultiService):
         log.msg('Slack: stopService')
         StatusReceiverMultiService.stopService(self)
         self._status.unsubscribe(self)
+        self._stopped = True
