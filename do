@@ -68,7 +68,6 @@ checkconfig () {
         templateContents=`cat "$root"/master/config.py.template`
         printf "# dummy config.py file created by the do command\n\n$templateContents\n" > "$root"/master/config.py
     fi
-    install_deps
     in_sandbox buildbot checkconfig master
 }
 
