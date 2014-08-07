@@ -38,7 +38,7 @@ class Slack(StatusReceiverMultiService):
             fields = [('text', text), ('attachments', attachments)]
             payload = {k: v for k, v in fields if v is not None}
         log.msg('Slack: send ' + json.dumps(payload))
-        res = requests.post(self.webhook, data={'payload': json.dumps(payload)})
+        res = requests.post(self._webhook, data={'payload': json.dumps(payload)})
         res.raise_for_status()
 
     def builderAdded(self, name, builder):
