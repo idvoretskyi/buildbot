@@ -95,11 +95,8 @@ background_ssh () {
     fi
 }
 
-ask () {
-    local ans
-    echo -n "$1 "
-    read ans
-    echo -n "$ans"
+logs () {
+  on_master uniq master/twistd.log
 }
 
 "$@"
