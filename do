@@ -96,7 +96,7 @@ background_ssh () {
 }
 
 logs () {
-  on_master uniq master/twistd.log
+  on_master tail -n 100 -f master/twistd.log
 }
 
 "$@"
