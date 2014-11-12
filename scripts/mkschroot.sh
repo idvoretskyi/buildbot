@@ -6,7 +6,8 @@ ARCH=$2
 BUILD_DEPENDENCIES='
 git-core g++ nodejs npm libprotobuf-dev
 libgoogle-perftools-dev libncurses5-dev libboost-all-dev nodejs-legacy
-curl libcurl3 libcurl4-openssl-dev protobuf-compiler'
+curl libcurl3 libcurl4-openssl-dev protobuf-compiler
+devscripts m4 debhelper'
 
 mk-sbuild --arch=$ARCH $CODENAME
 sudo schroot -c source:$CODENAME-$ARCH -- \
