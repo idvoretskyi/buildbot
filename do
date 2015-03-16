@@ -21,73 +21,73 @@ else
     ssh=ssh
 fi
 
-mk_sandbox () {
+do_mk_sandbox () {
     hash virtualenv 2>/dev/null || { echo >&2 "The Python virtualenv module is required but does not seem to be available"; exit 1; }
     virtualenv --no-site-packages sandbox
 }
 
-in_sandbox () (
+do_in_sandbox () (
     if [[ ! -d "$root"/sandbox ]]; then
-        mk_sandbox
+        do_mk_sandbox
     fi
     set +eu
     . "$root"/sandbox/bin/activate
     "$@"
 )
 
-install_deps () {
-    in_sandbox easy_install --quiet sqlalchemy==0.7.10
-    in_sandbox easy_install --quiet buildbot==$buildbot_version
-    in_sandbox easy_install --quiet buildbot-slave==$buildbot_version
-    in_sandbox easy_install --quiet requests
+do_install_deps () {
+    do_in_sandbox easy_install --quiet sqlalchemy==0.7.10
+    do_in_sandbox easy_install --quiet buildbot==$buildbot_version
+    do_in_sandbox easy_install --quiet buildbot-slave==$buildbot_version
+    do_in_sandbox easy_install --quiet requests
 }
 
-set-origin () {
+do_set-origin () {
     git remote set-url origin $master_full
 }
 
-on_master () {
+do_on_master () {
     $ssh $master_ssh "cd $master_path && ./do in_sandbox $(printf "%q " "$@")"
 }
 
-put_on_master () {
+do_put_on_master () {
     cat "$1" | on_master bash -c 'cat > "$1"' -- "$1"
 }
 
-start () {
-    on_master buildbot start master
+do_start () {
+    do_on_master buildbot start master
 }
 
-stop () {
-    on_master buildbot stop master
+do_stop () {
+    do_on_master buildbot stop master
 }
 
-checkconfig () {
+do_checkconfig () {
     if [[ ! -f master/config.py ]] || [[ `head -n 1 "$root"/master/config.py` =~ ^#\ dummy\ config.py\ file ]]; then
         # write a dummy config.py
         templateContents=`cat "$root"/master/config.py.template`
         printf "# dummy config.py file created by the do command\n\n$templateContents\n" > "$root"/master/config.py
     fi
-    in_sandbox buildbot checkconfig master
+    do_in_sandbox buildbot checkconfig master
 }
 
-reconfig () {
-    on_master buildbot reconfig master
+do_reconfig () {
+    do_on_master buildbot reconfig master
 }
 
-push () {
+do_push () {
     local id=$(cd "$root" && git rev-parse HEAD)
     git push origin HEAD:refs/pushed/$id
-    on_master git merge --ff-only refs/pushed/$id
+    do_on_master git merge --ff-only refs/pushed/$id
     git push origin :refs/pushed/$id
 }
 
-push_reconfig () {
-    push
-    reconfig
+do_push_reconfig () {
+    do_push
+    do_reconfig
 }
 
-background_ssh () {
+do_background_ssh () {
     if [[ -e "$root"/.ssh-master ]]; then
         echo .ssh-master already exists
     else
@@ -95,8 +95,10 @@ background_ssh () {
     fi
 }
 
-logs () {
-  on_master tail -n 100 -f master/twistd.log
+do_logs () {
+  do_on_master tail -n 100 -f master/twistd.log
 }
 
-"$@"
+cmd=$1
+shift
+"do_$cmd" "$@"
