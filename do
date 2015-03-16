@@ -10,6 +10,7 @@ master_path=buildbot
 
 master_ssh=$master_login@$master_host
 master_full=$master_ssh:$master_path
+master_url=http://$master_host:8010
 
 root=$(dirname "$0")
 
@@ -97,6 +98,52 @@ do_background_ssh () {
 
 do_logs () {
   do_on_master tail -n 100 -f master/twistd.log
+}
+
+do_login () {
+    echo -n 'Password: '; read -sr password; echo
+    curl -XPOST $master_url/login -d "username=rethinkdb&passwd=$password" -c .login.cookie; echo
+}
+
+do_curl () {
+    path=$1; shift
+    curl --silent -b .login.cookie "$master_url/$path" "$@"
+    echo
+}
+
+json () {
+    python -c '
+import json, sys, types
+data = json.loads(sys.stdin.read())
+for k in "'"$2"'".split("/"):
+  if k:
+    data = data[k]
+res = '"${1:-data}"'
+try:
+  assert not isinstance(res, types.StringTypes)
+  it = iter(res)
+except:
+  print res
+else:
+  for x in it:
+    print x'
+}
+
+do_json-api () {
+    do_curl "json/$1?as_text=1&select=${2:-}"
+}
+
+do_api () {
+    do_curl "json/$1" | json "${3:-data}" "${2:-}"
+}
+
+do_list-builders () {
+    do_api builders
+}
+
+do_force () {
+    reason="($USER)+./do+force+${2:-}"
+    do_curl builders/$1/force -XPOST -d "forcescheduler=force-$1&reason=$reason&rethinkdb_branch=${2:-next}"
 }
 
 cmd=$1
