@@ -33,7 +33,7 @@ do_in_sandbox () (
     fi
     set +eu
     . "$root"/sandbox/bin/activate
-    "$@"
+    exec "$@"
 )
 
 do_install_deps () {
