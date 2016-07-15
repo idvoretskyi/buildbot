@@ -143,7 +143,7 @@ do_list-builders () {
 
 do_force () {
     reason="($USER)+./do+force+${2:-}"
-    do_curl builders/$1/force -XPOST -d "forcescheduler=force-$1&reason=$reason&rethinkdb_branch=${2:-next}"
+    do_curl builders/$1/force -XPOST -d "forcescheduler=force-$1&reason=$reason&rethinkdb_branch=${2:-next}&rethinkdb-enterprise_branch=${2:-next}"
 }
 
 cmd=$1
